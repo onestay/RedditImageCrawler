@@ -4,7 +4,8 @@ If you get any Bugs please report them. I plan on adding alot more features, lik
 
 ## Installation
 *Download and Install Nodejs (https://nodejs.org/)
-*Download or clone this report
+
+*Download or clone this repo
 
 *In the folder where you cloned/unzipped it open a command prompt and type:
 
