@@ -15,6 +15,17 @@ npm install
 npm install -g bower
 bower install
 ```
+Create a new application on https://www.reddit.com/prefs/apps/ and set the type to "script".
+now you have to create a file called `config.json` wich contains the following:
+```
+{
+    "userAgent": "The name you gave your application",
+    "clientId": "the client id in the top left corner",
+    "clientSecret": "the client secrect",
+    "username": "your reddit username",
+    "password": "your reddit password"
+}
+```
 
 and finally to launch it type 
 `electron.` 

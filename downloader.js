@@ -5,7 +5,9 @@ const fs = require('fs-extra');
 const async = require('async');
 const imageDir = 'downloadedImages';
 const path = require('path');
-
+var subreddit;
+var blockDownload = true;
+var validSubreddit = false;
 
 function onReady() {
     fs.ensureDir(imageDir, (err) => {
@@ -21,28 +23,58 @@ function start() {
         username: config.username,
         password: config.password
     });
-    reddit.getSubreddit('Awwnime').getHot().map(post => post.url)
+    if (!subreddit) {
+        blockDownload = true;
+        document.getElementById('warnText').style.display = 'block';
+        document.getElementById('warnText').innerHTML = `You have to specify a subreddit`;
+        return;
+    }
+    if (validSubreddit !== true) return;
+    blockDownload = false;
+    document.getElementById('imageDownloadInfo').innerHTML = `Fetching Subreddit information...`;
+    document.getElementById('loadingCircle').style.display = 'block';
+    reddit.getSubreddit(subreddit).getHot().map(post => post.url)
         .then(m => {
             for (var i = 0; m.length > i; i++) {
-                queue.push({ url: m[i], title: i + 1 });
+                queue.push({ url: m[i], title: i, arrLength: m.length });
             }
         });
 }
 
+function checkURL(url) {
+    return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+}
+
+
+let s = 0;
+let f = 0;
 
 const queue = async.queue((m, callback) => {
-    console.log(`Downloading ${m.title} with ${m.url}`);
-    let image = request(m.url).pipe(fs.createWriteStream(`./downloadedImages/${m.title}.png`));
-    image.on('finish', () => {
-        console.log(`Finished Downloading ${m.title}`);
-        callback();
-        document.getElementById('imageDownloadInfo').innerHTML = `Downloading Image ${m.title} from 25`;
-        document.getElementById('loadingCircle').style.display = 'block';
-        if (m.title === 25) {
-            document.getElementById('imageDownloadInfo').innerHTML = 'Finished Downloading!';
+    let imageCheck = checkURL(m.url);
+    let fileExtension = m.url.split('.').pop().split(/\#|\?/)[0];
+    if (imageCheck === true && blockDownload === false) {
+        document.getElementById('imageDownloadInfo').innerHTML = `Downloading Images...`;
+        console.log(`Downloading ${m.title} with ${m.url}`);
+        let image = request(m.url).pipe(fs.createWriteStream(`./downloadedImages/${m.title}.${fileExtension}`));
+        image.on('finish', () => {
+            console.log(`Finished Downloading ${m.title}`);
+            callback();
+            s++;
+            if (m.title + 1 === m.arrLength) {
+                document.getElementById('imageDownloadInfo').innerHTML = `Finished Downloading! ${s} images downloaded`;
+                document.getElementById('loadingCircle').style.display = 'none';
+            }
+        });
+    } else {
+        console.log(`${m.url} is not a valid file url`);
+        f++;
+        if (m.title + 1 === m.arrLength) {
+            document.getElementById('imageDownloadInfo').innerHTML = `Finished Downloading! ${s} images downloaded`;
             document.getElementById('loadingCircle').style.display = 'none';
         }
-    });
+        callback();
+    }
+
 });
 
 function removeImages() {
@@ -54,4 +86,28 @@ function removeImages() {
             });
         }, this);
     });
+}
+
+function setSubreddit() {
+    document.getElementById('warnText').style.display = 'none';
+    const reddit = new Snoowrap({
+        userAgent: config.userAgent,
+        clientId: config.clientId,
+        clientSecret: config.clientSecret,
+        username: config.username,
+        password: config.password
+    });
+    subreddit = document.getElementById('inputSubreddit').value;
+    reddit.getSubreddit(subreddit).getHot().map(post => post.title)
+        .then(m => {
+            if (m.length === 0) {
+                blockDownload = true;
+                validSubreddit = false;
+                document.getElementById('warnText').style.display = 'block';
+                document.getElementById('warnText').innerHTML = `Couldn't find the Subreddit ${subreddit}`;
+                return;
+            }
+            validSubreddit = true;
+        })
+        .catch(console.error);
 }

@@ -44,3 +44,5 @@ config.json
 
 #image folder
 downloadedImages
+#vscode launch configs
+.vscode

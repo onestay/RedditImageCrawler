@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Awwnime Image Downloader</title>
+    <title>Reddit Image Crawler</title>
     <link rel="stylesheet" href=".\bower_components\bootstrap\dist\css\bootstrap.min.css">
     <script>
         if (typeof module === 'object') {
@@ -25,6 +25,7 @@
     <script>
         $(document).ready(() => {
             onReady();
+            $('#warnText').hide();
         });
     </script>
 </head>
@@ -32,8 +33,16 @@
 <body>
     <div class="container">
         <div class="text-center">
-            <h1>Awwnime Image Downloader</h1>
-            <p>Just hit the download Button and the Programm will download all files on the Front Page form /r/awwnime</p>
+            <h1>Reddit Image Crawler</h1>
+            <p>Just enter a subreddit below and hit Download Images</p>
+            <form class="form-inline" id="subredditForm">
+                <div class="form-group">
+                    <label for="">Subreddit</label>
+                    <input type="text" class="form-control" id="inputSubreddit" placeholder="awwnime">
+                    <button type="button" class="btn btn-info form-control" onclick="setSubreddit()">Submit</button>
+                </div>
+            </form>
+            <br>
             <button type="button" class="btn btn-primary" onclick="start()">Download Images</button>
             <button type="button" class="btn btn-danger" onclick="removeImages()">Delete all local stored images</button>
             <br>
@@ -44,6 +53,9 @@
             <div style="display: inline-block; margin-left: 10px">
                 <img src=".\assets\gif\loading.gif" width="30px" height="30px" style="display: none" id="loadingCircle">
             </div>
+            <form class="form-horizontal">
+            </form>
+            <p class="text-warning" style="font-size: 30px" id="warnText" style="display: none;">Test</p>
         </div>
     </div>
     <script src="./downloader.js"></script>
