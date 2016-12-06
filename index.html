@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Awwnime Image Downloader</title>
+    <link rel="stylesheet" href=".\bower_components\bootstrap\dist\css\bootstrap.min.css">
+    <script>
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <script src=".\bower_components\jquery\dist\jquery.min.js"></script>
+    <script src=".\bower_components\bootstrap\dist\js\bootstrap.min.js"></script>
+    <script>
+        if (window.module) module = window.module;
+    </script>
+    <style>
+        .border {
+            border-style: double;
+            border-color: #00CED1
+        }
+    </style>
+    <script>
+        $(document).ready(() => {
+            onReady();
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="text-center">
+            <h1>Awwnime Image Downloader</h1>
+            <p>Just hit the download Button and the Programm will download all files on the Front Page form /r/awwnime</p>
+            <button type="button" class="btn btn-primary" onclick="start()">Download Images</button>
+            <button type="button" class="btn btn-danger" onclick="removeImages()">Delete all local stored images</button>
+            <br>
+            <br>
+            <div style="display: inline-block">
+                <p id='imageDownloadInfo' style="font-size: 20px">Ready to download!</p>
+            </div>
+            <div style="display: inline-block; margin-left: 10px">
+                <img src=".\assets\gif\loading.gif" width="30px" height="30px" style="display: none" id="loadingCircle">
+            </div>
+        </div>
+    </div>
+    <script src="./downloader.js"></script>
+</body>
+
+</html>
