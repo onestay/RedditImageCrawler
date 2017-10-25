@@ -1,3 +1,5 @@
+## WON'T BE UPDATED ANYMORE (probably)
+
 ## Alpha Release
 This is a VERY eary release of the program. It's currently hardcoded to one subreddit, it isn't able to diffrentiate between pictures and text posts, downloads everything as .png and so on.
 If you get any Bugs please report them. I plan on adding alot more features, like selecting the pictures you'd like to download and much more. Feel free to contribute to the project.
